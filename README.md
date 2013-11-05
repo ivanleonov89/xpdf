@@ -1,6 +1,7 @@
 # Xpdf
 
 Run following task to get information if your system using Xpdf
+
 rake check_system_dependencies
 
 tests
