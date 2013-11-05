@@ -1,0 +1,25 @@
+#!/usr/bin/env ruby
+$:.unshift(File.join(File.dirname(__FILE__), '../lib'))
+require 'xpdf'
+
+tmpdir = File.join(Dir.tmpdir, "#{$$}-dependency_checks")
+FileUtils.mkdir(tmpdir) rescue nil
+
+root = File.join(File.dirname(__FILE__), '../')
+checkfile = File.join(tmpdir, 'check.pdf')
+FileUtils.cp(File.join(root, 'spec/fixtures/marketing.pdf'), checkfile)
+
+def check(what, &block)
+  print "Checking #{what}... "
+  yield
+  if $?.success?
+    puts "passed."
+  else
+    puts "failed."
+  end
+end
+
+check 'pdf to text' do
+  Xpdf::to_formatted_text(checkfile)
+end
+
